@@ -6,6 +6,7 @@ use App\Entity\ParsedMenu;
 use App\Service\FoodOptionsParser;
 use \Symfony\Component\Config\Definition\Exception\Exception as SymfonyException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,6 +39,30 @@ class FoodOptionsController extends AbstractController
         return $this->json([
             'day' => ParsedMenu::DAYS[date('w')],
             'options' => $this->getOptionsForRestaurant($restaurants[$name]),
+        ]);
+    }
+
+    #[Route('slack/food-options', name: 'slack_food_options')]
+    public function slackResponse(array $restaurants)
+    {
+        $options = [];
+        foreach ($restaurants as $restaurant) {
+            $options[] = $this->getOptionsForRestaurant($restaurant);
+        }
+
+        $blocks = [];
+        foreach ($options as $option) {
+            $blocks[] = [
+                'type' => 'section',
+                'text' => [
+                    'type' => 'mrkdwn',
+                    'text' => sprintf('*%s*%s```%s```', $option['name'], PHP_EOL, $option['data']),
+                ],
+            ];
+        }
+
+        return $this->json([
+            'blocks' => $blocks,
         ]);
     }
 
