@@ -22,10 +22,10 @@ services:
             - ./docker/server/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.tsukynginx.rule=Host(`ws-food-options.vernarsky.sk`)"
-            - "traefik.http.routers.tsukynginx.entrypoints=websecure"
-            - "traefik.http.routers.tsukynginx.tls.certresolver=myresolver"
-            - "traefik.http.routers.tsukynginx.tls=true"
+            - "traefik.http.routers.menu-parser-server.rule=Host(`ws-food-options.vernarsky.sk`)"
+            - "traefik.http.routers.menu-parser-server.entrypoints=websecure"
+            - "traefik.http.routers.menu-parser-server.tls.certresolver=myresolver"
+            - "traefik.http.routers.menu-parser-server.tls=true"
             - "traefik.docker.network=traefik"
 #        depends_on:
 #            db_server:
