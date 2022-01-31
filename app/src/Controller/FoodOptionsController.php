@@ -61,6 +61,7 @@ class FoodOptionsController extends AbstractController
         }
 
         return $this->json([
+            "response_type" => "in_channel",
             'blocks' => $blocks,
         ]);
     }
