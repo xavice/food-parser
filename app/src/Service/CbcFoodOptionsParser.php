@@ -16,11 +16,13 @@ final class CbcFoodOptionsParser extends FoodOptionsParser
 
         foreach ($menuItems as $item) {
             $item = new Crawler($item);
-            $content .= $item->filter("div[class='left']")->text();
+            $content .= $item->filter("[class='left']")->text() ?? "";
             $content .= ": ";
-            $content .= $item->filter("span[class='right']")->text() . PHP_EOL;
+            if ($item->filter("[class='right']")->count()) {
+                $content .= $item->filter("[class='right']")->text();
+            }
+            $content .= PHP_EOL;
         }
-
         $content = rtrim($content, PHP_EOL);
 
         if (array_key_exists($day, ParsedMenu::DAYS)) {
