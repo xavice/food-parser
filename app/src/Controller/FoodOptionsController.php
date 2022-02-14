@@ -16,7 +16,15 @@ class FoodOptionsController extends AbstractController
     {
         $options = [];
         foreach ($restaurants as $restaurant) {
-            $options[] = $this->getOptionsForRestaurant($restaurant);
+            try {
+                $options[] = $this->getOptionsForRestaurant($restaurant);
+            } catch (\Throwable $e) {
+                $options[] = [
+                    'name' => $restaurant['name'],
+                    'url' => $restaurant['url'],
+                    'data' => "Couldn't parse restaurants menu: " . $e->getMessage(),
+                ];
+            }
         }
 
         return $this->json([
@@ -35,9 +43,18 @@ class FoodOptionsController extends AbstractController
             ]);
 
         }
+        try {
+            $options = $this->getOptionsForRestaurant($restaurants[$name]);
+        } catch (\Throwable $e) {
+            $options = [
+                'name' => $restaurants[$name]['name'],
+                'url' => $restaurants[$name]['url'],
+                'data' => "Couldn't parse restaurants menu: " . $e->getMessage(),
+            ];
+        }
         return $this->json([
             'day' => ParsedMenu::DAYS[date('w')],
-            'options' => $this->getOptionsForRestaurant($restaurants[$name]),
+            'options' => $options,
         ]);
     }
 
@@ -46,7 +63,15 @@ class FoodOptionsController extends AbstractController
     {
         $options = [];
         foreach ($restaurants as $restaurant) {
-            $options[] = $this->getOptionsForRestaurant($restaurant);
+            try {
+                $options[] = $this->getOptionsForRestaurant($restaurant);
+            } catch (\Throwable $e) {
+                $options[] = [
+                    'name' => $restaurant['name'],
+                    'url' => $restaurant['url'],
+                    'data' => "Couldn't parse restaurants menu: " . $e->getMessage(),
+                ];
+            }
         }
 
         $blocks = [];
