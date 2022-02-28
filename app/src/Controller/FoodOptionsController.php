@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\ParsedMenu;
 use App\Service\FoodOptionsParser;
+use DateTime;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use \Symfony\Component\Config\Definition\Exception\Exception as SymfonyException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +63,13 @@ class FoodOptionsController extends AbstractController
     #[Route('slack/food-options', name: 'slack_food_options')]
     public function slackResponse(array $restaurants)
     {
+        $cache = new FilesystemAdapter();
+        $cahceKey = "slack-response-" . date("Y-m-d");
+        $cacheItem = $cache->getItem($cahceKey);
+        if ($cacheItem->get()) {
+            return $this->json($cacheItem->get());
+        }
+
         $options = [];
         foreach ($restaurants as $restaurant) {
             try {
@@ -85,10 +94,16 @@ class FoodOptionsController extends AbstractController
             ];
         }
 
-        return $this->json([
+        $response = [
             "response_type" => "in_channel",
             'blocks' => $blocks,
-        ]);
+        ];
+        $expires = new DateTime();
+        $expires->modify("+24 hours");
+        $cacheItem->set($response)->expiresAt($expires);
+        $cache->save($cacheItem);
+
+        return $this->json($response);
     }
 
     /**
