@@ -9,14 +9,18 @@ parameters:
             name: 'Veranda'
             url: 'https://veranda.bevanda.sk/'
             parser: 'App\Service\VerandaFoodOptionsParser'
-        veda:
-            name: 'Veda'
-            url: 'https://www.store.vedaveg.com/restauracja/veda-vegetarian-vegan-2#menu-denne-menu'
-            parser: 'App\Service\VedaFoodOptionsParser'
+#        veda:
+#            name: 'Veda'
+#            url: 'https://www.store.vedaveg.com/restauracja/veda-vegetarian-vegan-2#menu-denne-menu'
+#            parser: 'App\Service\VedaFoodOptionsParser'
         cbc:
             name: 'CBC Cantina'
             url: 'https://restauracie.sme.sk/restauracia/cbc-jedalen_542-ruzinov_2980/denne-menu'
             parser: 'App\Service\CbcFoodOptionsParser'
+        veglife:
+            name: 'Veglife'
+            url: 'https://www.veglife.sk/sk/obchod/'
+            parser: 'App\Service\VeglifeFoodOptionsParser'
 
 services:
     # default configuration for services in *this* file
