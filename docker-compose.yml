@@ -2,8 +2,6 @@ version: '3.9'
 
 networks:
     menu-parser-app:
-    traefik:
-        external: true
 
 services:
     server:
@@ -19,13 +17,5 @@ services:
             - ./app:/var/www/html
             - ./docker/server/apache/sites-enabled:/etc/apache2/sites-enabled
             - ./docker/server/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.menu-parser-server.rule=Host(`${HOST_URL}`)"
-            - "traefik.http.routers.menu-parser-server.entrypoints=websecure"
-            - "traefik.http.routers.menu-parser-server.tls.certresolver=myresolver"
-            - "traefik.http.routers.menu-parser-server.tls=true"
-            - "traefik.docker.network=traefik"
         networks:
             - menu-parser-app
-            - traefik
